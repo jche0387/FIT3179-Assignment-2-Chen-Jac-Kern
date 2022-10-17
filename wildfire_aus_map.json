@@ -1,0 +1,82 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Wildfire occurences in Australia from 1 Oct 2019 to 30 Sep 2019",
+    "data": {"url": "https://raw.githubusercontent.com/jche0387/FIT3179/main/wildfire%20in%20aus%201%20aug%20to%2031%20aug%20in%20day.csv"},
+    "transform": [{"filter": "datum.acq_date == day_selection"}],
+    "width":  "container",
+    "height": 500,
+    "params":[
+        {
+            "name": "day_selection",
+            "value": 1,
+            "bind":{"input": "range", "min": 1, "max": 31, "step": 1, "name": "Date on August 2019:  "}
+        },
+        {
+            "name": "zoom_level",
+            "value": 1500,
+            "bind": {"input": "range", "min": 420, "max": 2500, "step": 100, "name": "Zoom by:  "  }
+        },
+        {
+            "name": "centre_to",
+            "value": [133.25, -24.15],
+            "bind": {
+                "input": "select",
+                "options": [[133.25, -24.15], [145.756619, -23.850571], [146.226461, -32.627785], [134.940252, -30.040837], [133.560010, -19.563068], [122.169156, -26.502937], [146.439591, -41.902185]], 
+                "labels": ["Centre of Australia", "Centre of Queensland", "Centre of New South Wales", "Centre of South Australia", "Centre of Northern Territory", "Centre of Western Australia", "Centre of Tasmania"],
+                "name": "Map Centre:  "
+            }
+        }
+    ],
+    "projection": {"scale": {"expr": "zoom_level"},
+                    "center": {"expr": "centre_to"}},
+    "layer": [
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/jche0387/FIT3179/main/ne_10m_admin_1_states_provinces.json",
+            "format": {
+              "type": "topojson",
+              "feature": "ne_10m_admin_1_states_provinces"
+            }
+          },
+          "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+        },
+        {
+            "data": {
+              "url": "https://raw.githubusercontent.com/jche0387/FIT3179/main/ne_10m_ocean.json",
+              "format": {"type": "topojson", "feature": "ne_10m_ocean"}
+            },
+            "mark": {"type": "geoshape", "fill": "skyblue"}
+        },
+        {
+            "encoding": {
+                "longitude": {"field": "longitude", "type": "quantitative"},
+                "latitude": {"field": "latitude", "type": "quantitative"},
+                "color": {
+                    "field": "confidence",
+                    "type": "quantitative",
+                    "title": "How confident we are",
+                    "scale": {
+                        "type": "threshold",
+                        "domain": [20,40,60,80],
+                        "range": ["#fdbe85", "#fd8d3c", "#e6550d", "#bd0026", "#7f0000"]
+                    }
+                },
+                "size":{
+                    "field": "brightness",
+                    "type": "quantitative",
+                    "title": "Brightness seen from satellite",
+                    "scale":{
+                        "type": "threshold",
+                        "domain": [320,340,360,380],
+                        "range": [50,80,110,140,170]
+                    }
+                },
+                "tooltip": [
+                    {"field": "confidence", "type": "quantitative"},
+                    {"field": "brightness", "type": "quantitative"}
+                ]       
+            },
+            "mark": {"type": "circle", "opacity": 0.5, "size": 15} 
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "Pie Chart of Day vs Night",
+    "title": "Wildfire occurences during the day and night",
+    "width": 350,
+    "height": 350,
+    "data": {"url": "https://raw.githubusercontent.com/jche0387/FIT3179/main/wildfire%20in%20aus%201%20aug%202019%20to%2031%20aug%202019.csv"},
+    "transform": [
+        {
+            "aggregate": [{"op": "count", "as": "DayOrNight"}],
+            "groupby": ["daynight"]
+        }
+    ],
+    "encoding": {
+      "theta": {"field": "DayOrNight", "type": "quantitative", "stack": "normalize"},
+      "color": {"field": "daynight", "type": "nominal", "legend":null, "scale": {"domain": ["N", "D"], "range": ["#353838", "#ffa95e"]}},
+      "tooltip": [
+        {"field": "daynight", "title": "Day or Night"},
+        {"field": "DayOrNight", "title": "Number of wildfires"}]
+    },
+    "layer": [{
+        "mark": {"type": "arc", "outerRadius": 80}
+      }, {
+        "mark": {"type": "text", "radius": 90},
+        "encoding": {
+          "text": {"field": "daynight", "type": "nominal"}
+        }
+      }]
+}
+    

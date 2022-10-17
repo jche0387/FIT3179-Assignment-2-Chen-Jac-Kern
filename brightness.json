@@ -1,0 +1,23 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "Brightness in August 2019",
+    "width": "container",
+    "data": {"url": "https://raw.githubusercontent.com/jche0387/FIT3179/main/wildfire%20in%20aus%201%20aug%20to%2031%20aug%20in%20day.csv"},
+    "transform": [
+        {
+            "aggregate": [{"op": "mean", "field": "brightness", "as": "mean of brightness daily"}],
+            "groupby": ["acq_date"]
+        }],
+    "mark": {
+        "type": "line", 
+        "point": {"filled": false, "fill": "white"}, 
+        "tooltip": true},
+    "encoding": {
+        "x": {"field": "acq_date", "axis": {"tickCount": 5}, "title": "Date in August 2019", "type": "ordinal"},
+        "y": {"field": "mean of brightness daily", "type": "quantitative", "scale": {"domain": [310,340]}},
+        "tooltip": [
+            {"field": "acq_date", "type": "ordinal", "title": "Date"},
+            {"field": "mean of brightness daily", "type": "quantitative", "title": "Mean of brightness", "format": ".2f"}
+        ]
+    }
+}

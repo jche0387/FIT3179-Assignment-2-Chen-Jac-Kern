@@ -1,0 +1,54 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {"url": "https://raw.githubusercontent.com/jche0387/FIT3179/main/wildfire%20in%20aus%201%20aug%202019%20to%2031%20aug%202019.csv"},
+    "vconcat": [
+        {
+            "width": "container",
+            "height": 60,
+            "mark": "line",
+            "title": "Amount of wildfire cases everyday",
+            "params": [
+                {"name": "time_brush", "select": {"type": "interval", "encodings": ["x"]}}
+            ],
+            "encoding": {
+                "x":{
+                    "field": "acq_date",
+                    "timeUnit": "utcyearmonthdate",
+                    "axis": {"title": "Date", "format": "%-d/%-m/%Y"}
+                },
+                "y":{
+                    "aggregate": "count",
+                    "axis": {"tickCount": 3, "grid": false},
+                    "title": "Wildfire cases",
+                    "scale": {"domain": [0,1200]}
+                }
+            }
+        },
+        {
+            "width":"container",
+            "transform": [
+                {
+                    "bin": {"step": 20, "extent": [320, 400]},
+                    "field": "brightness",
+                    "as": "Brightness"
+                }
+            ],
+            "mark": "area",
+            "encoding": {
+                "x": {
+                    "field": "acq_date",
+                    "timeUnit": "utcyearmonthdate",
+                    "scale": {"domain": {"param": "time_brush"}},
+                    "axis": {"title": "Date", "tickCount": 7, "grid": false}
+                    },
+                "y": {"aggregate": "count", "title": "Wildfire cases", "scale": {"domain": [0,1200]}},
+                "color": {
+                    "field": "Brightness",
+                    "scale": {
+                        "range": ["#fdbe85", "#fd8d3c", "#e6550d", "#bd0026", "#7f0000"]
+                    }
+                }
+            }
+        }
+    ]
+}
